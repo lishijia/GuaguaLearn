@@ -52,18 +52,24 @@
       <text class="action-title">开始学习</text>
       <text class="action-desc">学习新单词</text>
     </view>
-    
+
     <view class="action-card" bindtap="quickReview">
       <text class="action-icon">🔄</text>
       <text class="action-title">快速复习</text>
       <text class="action-desc">待复习 {{reviewCount}} 个</text>
       <view class="badge" wx:if="{{reviewCount > 0}}">{{reviewCount > 99 ? '99+' : reviewCount}}</view>
     </view>
-    
+
     <view class="action-card" bindtap="randomTest">
       <text class="action-icon">🎯</text>
       <text class="action-title">随机测试</text>
       <text class="action-desc">检验成果</text>
+    </view>
+
+    <view class="action-card" bindtap="goSearch">
+      <text class="action-icon">🔍</text>
+      <text class="action-title">搜索单词</text>
+      <text class="action-desc">快速查找</text>
     </view>
   </view>
 

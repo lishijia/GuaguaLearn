@@ -1,0 +1,48 @@
+<!--pages/onboarding/index.wxml-->
+<view class="onboarding-container">
+  <!-- 进度指示器 -->
+  <view class="progress-dots" wx:if="{{steps.length > 1}}">
+    <view
+      class="dot {{index === currentIndex ? 'active' : ''}}"
+      wx:for="{{steps}}"
+      wx:key="id"
+      bindtap="onStepTap"
+      data-index="{{index}}"
+    ></view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content-wrapper">
+    <view class="icon-wrapper">
+      <text class="step-icon">{{currentStep.icon}}</text>
+    </view>
+
+    <view class="text-wrapper">
+      <text class="step-title">{{currentStep.title}}</text>
+      <text class="step-description">{{currentStep.description}}</text>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button
+      class="btn-secondary"
+      wx:if="{{canGoBack}}"
+      bindtap="prevStep"
+    >
+      上一步
+    </button>
+
+    <button
+      class="btn-primary"
+      bindtap="nextStep"
+    >
+      {{currentIndex === steps.length - 1 ? '开始使用' : '下一步'}}
+    </button>
+  </view>
+
+  <!-- 跳过按钮 -->
+  <view class="skip-btn" wx:if="{{canSkip}}" bindtap="skipOnboarding">
+    <text>跳过引导</text>
+  </view>
+</view>

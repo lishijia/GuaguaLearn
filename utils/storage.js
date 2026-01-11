@@ -50,6 +50,11 @@ function get(key, defaultValue = null) {
         return data !== '' ? data : defaultValue;
     } catch (e) {
         console.error('Storage get error:', e);
+        wx.showModal({
+            title: '数据读取失败',
+            content: '读取本地数据时出错，请检查存储权限或重试',
+            showCancel: false
+        });
         return defaultValue;
     }
 }
@@ -63,6 +68,20 @@ function set(key, value) {
         return true;
     } catch (e) {
         console.error('Storage set error:', e);
+        // 检查是否是存储空间不足
+        if (e.errMsg && e.errMsg.includes('quota')) {
+            wx.showModal({
+                title: '存储空间不足',
+                content: '本地存储空间已满，建议清理小程序缓存或导出数据备份',
+                showCancel: false
+            });
+        } else {
+            wx.showModal({
+                title: '数据保存失败',
+                content: '保存数据时出错: ' + (e.errMsg || '未知错误'),
+                showCancel: false
+            });
+        }
         return false;
     }
 }
@@ -443,6 +462,210 @@ function resetAllProgress() {
     return true;
 }
 
+// ========== 数据导出/导入 ==========
+
+/**
+ * 导出所有用户数据为JSON字符串
+ */
+function exportData() {
+    try {
+        const data = {
+            version: '1.0',
+            exportTime: new Date().toISOString(),
+            settings: getSettings(),
+            progress: getProgress(),
+            wordRecords: getWordRecords(),
+            favorites: getFavorites(),
+            checkIn: getCheckInRecords(),
+            achievements: getAchievements(),
+            wrongWords: getWrongWords()
+        };
+
+        return {
+            success: true,
+            data: JSON.stringify(data),
+            size: new Blob([JSON.stringify(data)]).size
+        };
+    } catch (e) {
+        console.error('Export error:', e);
+        return {
+            success: false,
+            error: e.message || '导出失败'
+        };
+    }
+}
+
+/**
+ * 从JSON字符串导入数据
+ * @param {string} jsonData - JSON格式的数据字符串
+ * @param {Object} options - 导入选项
+ * @param {boolean} options.merge - 是否合并模式（true: 合并，false: 覆盖）
+ * @param {string[]} options.include - 要导入的数据类型列表
+ */
+function importData(jsonData, options = {}) {
+    try {
+        const data = JSON.parse(jsonData);
+
+        // 验证数据格式
+        if (!data.version || !data.exportTime) {
+            return {
+                success: false,
+                error: '数据格式无效'
+            };
+        }
+
+        const merge = options.merge !== false; // 默认合并模式
+        const include = options.include || [
+            'settings', 'progress', 'wordRecords',
+            'favorites', 'checkIn', 'achievements', 'wrongWords'
+        ];
+
+        let importCount = 0;
+
+        // 导入设置
+        if (include.includes('settings') && data.settings) {
+            if (merge) {
+                saveSettings(data.settings);
+            } else {
+                set(KEYS.SETTINGS, data.settings);
+            }
+            importCount++;
+        }
+
+        // 导入进度
+        if (include.includes('progress') && data.progress) {
+            if (merge) {
+                // 合并模式：保留较大的值
+                const current = getProgress();
+                const merged = {
+                    ...current,
+                    todayLearned: Math.max(current.todayLearned, data.progress.todayLearned || 0),
+                    todayReviewed: Math.max(current.todayReviewed, data.progress.todayReviewed || 0),
+                    totalLearned: Math.max(current.totalLearned, data.progress.totalLearned || 0),
+                    totalMastered: Math.max(current.totalMastered, data.progress.totalMastered || 0),
+                    streak: Math.max(current.streak, data.progress.streak || 0),
+                    lastStudyDate: current.lastStudyDate || data.progress.lastStudyDate
+                };
+                set(KEYS.PROGRESS, merged);
+            } else {
+                set(KEYS.PROGRESS, data.progress);
+            }
+            importCount++;
+        }
+
+        // 导入单词记录
+        if (include.includes('wordRecords') && data.wordRecords) {
+            if (merge) {
+                const current = getWordRecords();
+                const merged = { ...current, ...data.wordRecords };
+                set(KEYS.WORD_RECORDS, merged);
+            } else {
+                set(KEYS.WORD_RECORDS, data.wordRecords);
+            }
+            importCount++;
+        }
+
+        // 导入收藏
+        if (include.includes('favorites') && data.favorites) {
+            if (merge) {
+                const current = getFavorites();
+                const merged = [...new Set([...current, ...data.favorites])];
+                set(KEYS.FAVORITES, merged);
+            } else {
+                set(KEYS.FAVORITES, data.favorites);
+            }
+            importCount++;
+        }
+
+        // 导入打卡记录
+        if (include.includes('checkIn') && data.checkIn) {
+            if (merge) {
+                const current = getCheckInRecords();
+                const mergedDates = [...new Set([...current.dates, ...data.checkIn.dates])];
+                const merged = {
+                    dates: mergedDates,
+                    currentStreak: Math.max(current.currentStreak, data.checkIn.currentStreak || 0),
+                    maxStreak: Math.max(current.maxStreak, data.checkIn.maxStreak || 0)
+                };
+                set(KEYS.CHECK_IN, merged);
+            } else {
+                set(KEYS.CHECK_IN, data.checkIn);
+            }
+            importCount++;
+        }
+
+        // 导入成就
+        if (include.includes('achievements') && data.achievements) {
+            if (merge) {
+                const current = getAchievements();
+                const merged = [...new Set([...current, ...data.achievements])];
+                set(KEYS.ACHIEVEMENTS, merged);
+            } else {
+                set(KEYS.ACHIEVEMENTS, data.achievements);
+            }
+            importCount++;
+        }
+
+        // 导入错题本
+        if (include.includes('wrongWords') && data.wrongWords) {
+            if (merge) {
+                const current = getWrongWords();
+                const merged = [...new Set([...current, ...data.wrongWords])];
+                set(KEYS.WRONG_WORDS, merged);
+            } else {
+                set(KEYS.WRONG_WORDS, data.wrongWords);
+            }
+            importCount++;
+        }
+
+        return {
+            success: true,
+            importCount,
+            exportTime: data.exportTime
+        };
+    } catch (e) {
+        console.error('Import error:', e);
+        return {
+            success: false,
+            error: e.message || '导入失败，数据格式可能不正确'
+        };
+    }
+}
+
+/**
+ * 获取数据统计信息
+ */
+function getDataStats() {
+    try {
+        const info = wx.getStorageInfoSync();
+        const progress = getProgress();
+        const wordRecords = getWordRecords();
+
+        return {
+            success: true,
+            stats: {
+                // 存储信息
+                currentSize: info.currentSize,
+                limitSize: info.limitSize,
+                usagePercent: ((info.currentSize / info.limitSize) * 100).toFixed(2),
+                keysCount: info.keys.length,
+
+                // 学习统计
+                totalLearned: progress.totalLearned || 0,
+                totalMastered: progress.totalMastered || 0,
+                wordRecordsCount: Object.keys(wordRecords).length,
+                streak: progress.streak || 0
+            }
+        };
+    } catch (e) {
+        console.error('Get stats error:', e);
+        return {
+            success: false,
+            error: e.message
+        };
+    }
+}
+
 module.exports = {
     // 基础操作
     get,
@@ -492,6 +715,11 @@ module.exports = {
 
     // 重置
     resetAllProgress,
+
+    // 数据导出/导入
+    exportData,
+    importData,
+    getDataStats,
 
     // 常量
     KEYS,

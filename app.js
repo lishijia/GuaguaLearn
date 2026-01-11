@@ -1,4 +1,6 @@
 // app.js
+const onboarding = require('./utils/onboarding.js');
+
 App({
   onLaunch() {
     // 展示本地存储能力
@@ -12,6 +14,13 @@ App({
         // 发送 res.code 到后台换取 openId, sessionKey, unionId
       }
     })
+
+    // 检查是否需要显示引导
+    if (!onboarding.hasCompletedOnboarding()) {
+      wx.reLaunch({
+        url: '/pages/onboarding/index'
+      })
+    }
   },
   globalData: {
     userInfo: null,

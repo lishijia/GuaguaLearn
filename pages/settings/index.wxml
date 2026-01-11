@@ -137,9 +137,50 @@
   <view class="settings-group">
     <text class="group-title">数据管理</text>
 
+    <view class="settings-item" bindtap="showDataStats">
+      <text class="item-icon">📊</text>
+      <view class="item-content">
+        <text class="item-title">数据统计</text>
+        <text class="item-desc">查看存储使用情况和学习统计</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+
+    <view class="settings-item" bindtap="exportData">
+      <text class="item-icon">📤</text>
+      <view class="item-content">
+        <text class="item-title">导出数据</text>
+        <text class="item-desc">备份学习进度到剪贴板</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+
+    <view class="settings-item" bindtap="importData">
+      <text class="item-icon">📥</text>
+      <view class="item-content">
+        <text class="item-title">导入数据</text>
+        <text class="item-desc">从备份恢复学习进度</text>
+      </view>
+      <text class="item-arrow">›</text>
+    </view>
+
     <view class="settings-item danger-btn" bindtap="resetProgress">
       <text class="item-icon">🗑️</text>
       <text class="item-title">重置学习进度</text>
+    </view>
+  </view>
+
+  <!-- 帮助与支持 -->
+  <view class="settings-group">
+    <text class="group-title">帮助与支持</text>
+
+    <view class="settings-item" bindtap="showOnboarding">
+      <text class="item-icon">📖</text>
+      <view class="item-content">
+        <text class="item-title">使用指南</text>
+        <text class="item-desc">查看应用功能介绍</text>
+      </view>
+      <text class="item-arrow">›</text>
     </view>
   </view>
 

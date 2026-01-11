@@ -1,0 +1,93 @@
+<!--pages/search/index.wxml-->
+<view class="search-container">
+  <!-- 搜索框 -->
+  <view class="search-bar">
+    <view class="search-input-wrapper">
+      <text class="search-icon">🔍</text>
+      <input
+        class="search-input"
+        type="text"
+        placeholder="搜索单词或释义"
+        value="{{searchKeyword}}"
+        bindinput="onSearchInput"
+        bindconfirm="onSearch"
+        confirm-type="search"
+      />
+      <text class="clear-icon" wx:if="{{searchKeyword}}" bindtap="clearSearch">✕</text>
+    </view>
+    <button class="search-btn" bindtap="onSearch">搜索</button>
+  </view>
+
+  <!-- 搜索结果 -->
+  <view class="search-results" wx:if="{{showResults}}">
+    <view class="result-header">
+      <text class="result-count">找到 {{searchResults.length}} 个相关单词</text>
+    </view>
+
+    <scroll-view class="result-list" scroll-y="{{true}}">
+      <view
+        class="word-item"
+        wx:for="{{searchResults}}"
+        wx:key="id"
+        bindtap="viewWord"
+        data-id="{{item.id}}"
+      >
+        <view class="word-main">
+          <text class="word-text">{{item.word}}</text>
+          <text class="word-phonetic">{{item.phonetic}}</text>
+        </view>
+        <view class="word-meaning">{{item.meaning}}</view>
+        <view class="word-actions">
+          <button
+            class="action-btn learn-btn"
+            catchtap="learnWord"
+            data-word="{{item}}"
+          >
+            学习
+          </button>
+        </view>
+      </view>
+
+      <view class="empty-result" wx:if="{{searchResults.length === 0}}">
+        <text class="empty-icon">📚</text>
+        <text class="empty-text">未找到相关单词</text>
+        <text class="empty-hint">试试其他关键词吧</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 搜索历史 -->
+  <view class="search-history" wx:if="{{!showResults}}">
+    <view class="history-header" wx:if="{{searchHistory.length > 0}}">
+      <text class="history-title">搜索历史</text>
+      <text class="clear-history" bindtap="clearHistory">清空</text>
+    </view>
+
+    <view class="history-list">
+      <view
+        class="history-item"
+        wx:for="{{searchHistory}}"
+        wx:key="*this"
+        bindtap="onHistoryTap"
+        data-keyword="{{item}}"
+      >
+        <text class="history-icon">🕐</text>
+        <text class="history-text">{{item}}</text>
+      </view>
+    </view>
+
+    <view class="empty-history" wx:if="{{searchHistory.length === 0}}">
+      <text class="empty-text">暂无搜索历史</text>
+    </view>
+  </view>
+
+  <!-- 搜索提示 -->
+  <view class="search-tips" wx:if="{{!showResults && searchHistory.length === 0}}">
+    <text class="tips-title">💡 搜索提示</text>
+    <view class="tips-list">
+      <text class="tip-item">• 支持搜索英文单词</text>
+      <text class="tip-item">• 支持搜索中文释义</text>
+      <text class="tip-item">• 输入关键词即可快速查找</text>
+    </view>
+  </view>
+</view>

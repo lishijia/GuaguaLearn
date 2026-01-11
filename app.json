@@ -1,10 +1,12 @@
 {
   "pages": [
+    "pages/onboarding/index",
     "pages/home/index",
     "pages/study/index",
     "pages/test/index",
     "pages/progress/index",
-    "pages/settings/index"
+    "pages/settings/index",
+    "pages/search/index"
   ],
   "window": {
     "backgroundTextStyle": "light",

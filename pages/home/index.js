@@ -99,6 +99,13 @@ Page({
         });
     },
 
+    // 搜索单词
+    goSearch() {
+        wx.navigateTo({
+            url: '/pages/search/index'
+        });
+    },
+
     // 选择年级
     selectGrade(e) {
         const grade = e.currentTarget.dataset.grade;

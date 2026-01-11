@@ -80,6 +80,13 @@ Page({
         const word = this.data.currentWord?.word;
         if (!word) return;
 
+        // 检查音效开关
+        const settings = storage.getSettings();
+        if (!settings.soundEnabled) {
+            wx.showToast({ title: '音效已关闭', icon: 'none' });
+            return;
+        }
+
         if (!this.innerAudioContext) {
             this.innerAudioContext = wx.createInnerAudioContext();
             // 即使在静音模式下也能播放声音 (iOS需要)
@@ -95,18 +102,37 @@ Page({
             this.innerAudioContext.onError((res) => {
                 console.error('Play Sound Error:', res);
                 // 具体的错误提示
-                let msg = '发音失败';
+                let msg = '发音失败，请检查网络';
                 if (res.errCode === 10001) msg = '系统错误';
-                if (res.errCode === 10002) msg = '网络错误';
-                if (res.errCode === 10003) msg = '文件错误';
+                if (res.errCode === 10002) msg = '网络错误，请检查连接';
+                if (res.errCode === 10003) msg = '音频源错误';
                 if (res.errCode === 10004) msg = '格式错误';
                 wx.showToast({ title: msg, icon: 'none' });
+            });
+
+            this.innerAudioContext.onEnded(() => {
+                console.log('Audio played successfully');
             });
         }
 
         // 使用有道词典语音接口 (type=2 美音, type=1 英音)
         this.innerAudioContext.src = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
-        this.innerAudioContext.play();
+
+        // 添加播放重试机制
+        const tryPlay = (retryCount = 0) => {
+            try {
+                this.innerAudioContext.play();
+            } catch (e) {
+                console.error('Play error:', e);
+                if (retryCount < 2) {
+                    setTimeout(() => tryPlay(retryCount + 1), 500);
+                } else {
+                    wx.showToast({ title: '播放失败，请稍后重试', icon: 'none' });
+                }
+            }
+        };
+
+        tryPlay();
     },
 
     // 触摸开始
