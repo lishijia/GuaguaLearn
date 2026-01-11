@@ -1,0 +1,111 @@
+<!--pages/progress/index.wxml-->
+<view class="progress-container">
+  <text class="page-title">学习进度</text>
+
+  <!-- 统计卡片 -->
+  <view class="stats-grid">
+    <view class="stat-card primary">
+      <view class="stat-icon">📚</view>
+      <view class="stat-value">{{progress.totalLearned}}</view>
+      <view class="stat-label">累计学习</view>
+    </view>
+    <view class="stat-card secondary">
+      <view class="stat-icon">✅</view>
+      <view class="stat-value">{{progress.totalMastered}}</view>
+      <view class="stat-label">已掌握</view>
+    </view>
+    <view class="stat-card">
+      <view class="stat-icon">🔥</view>
+      <view class="stat-value">{{streak}}</view>
+      <view class="stat-label">连续天数</view>
+    </view>
+    <view class="stat-card">
+      <view class="stat-icon">📊</view>
+      <view class="stat-value">{{progress.todayLearned}}</view>
+      <view class="stat-label">今日学习</view>
+    </view>
+  </view>
+
+  <!-- 学习趋势图 -->
+  <view class="chart-section">
+    <view class="section-header">
+      <text class="section-title">学习趋势</text>
+      <view class="section-tab">
+        <view class="tab-btn {{chartRange === 7 ? 'active' : ''}}" bindtap="setChartRange" data-range="7">7天</view>
+        <view class="tab-btn {{chartRange === 30 ? 'active' : ''}}" bindtap="setChartRange" data-range="30">30天</view>
+      </view>
+    </view>
+    <view class="bar-chart">
+      <view class="bar-item" wx:for="{{chartData}}" wx:key="index">
+        <view class="bar" style="height: {{item.height}}rpx"></view>
+        <text class="bar-label">{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 学习热力图 -->
+  <view class="chart-section">
+    <view class="section-header">
+      <text class="section-title">学习日历</text>
+    </view>
+    <view class="heatmap">
+      <view 
+        wx:for="{{heatmapData}}" 
+        wx:key="index" 
+        class="heat-cell level-{{item}}"
+      ></view>
+    </view>
+    <view class="heatmap-legend">
+      <text>少</text>
+      <view class="legend-item" style="background: var(--bg-tertiary)"></view>
+      <view class="legend-item" style="background: rgba(14, 165, 233, 0.3)"></view>
+      <view class="legend-item" style="background: rgba(14, 165, 233, 0.6)"></view>
+      <view class="legend-item" style="background: var(--primary-color)"></view>
+      <text>多</text>
+    </view>
+  </view>
+
+  <!-- 词汇掌握分布 -->
+  <view class="chart-section">
+    <view class="section-header">
+      <text class="section-title">词汇掌握</text>
+    </view>
+    <view class="pie-section" style="--mastered: {{stats.mastered}}; --learning: {{stats.learning}}">
+      <view class="pie-chart"></view>
+      <view class="pie-legend">
+        <view class="legend-row">
+          <view class="legend-dot mastered"></view>
+          <text class="legend-text">已掌握</text>
+          <text class="legend-value">{{stats.mastered}}</text>
+        </view>
+        <view class="legend-row">
+          <view class="legend-dot learning"></view>
+          <text class="legend-text">学习中</text>
+          <text class="legend-value">{{stats.learning}}</text>
+        </view>
+        <view class="legend-row">
+          <view class="legend-dot new"></view>
+          <text class="legend-text">未学习</text>
+          <text class="legend-value">{{stats.new}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 成就徽章 -->
+  <view class="achievements-section">
+    <view class="section-header">
+      <text class="section-title">成就徽章</text>
+    </view>
+    <view class="badge-grid">
+      <view 
+        wx:for="{{achievements}}" 
+        wx:key="id" 
+        class="badge-item {{item.unlocked ? 'unlocked' : ''}}"
+      >
+        <view class="badge-icon">{{item.icon}}</view>
+        <text class="badge-name">{{item.name}}</text>
+      </view>
+    </view>
+  </view>
+</view>

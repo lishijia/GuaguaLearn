@@ -1,0 +1,150 @@
+<!--pages/settings/index.wxml-->
+<view class="settings-container">
+  <text class="page-title">设置</text>
+
+  <!-- 学习设置 -->
+  <view class="settings-group">
+    <text class="group-title">学习设置</text>
+    
+    <view class="settings-item">
+      <text class="item-icon">🎯</text>
+      <view class="item-content">
+        <text class="item-title">每日学习目标</text>
+        <text class="item-desc">设置每天要学习的单词数量</text>
+      </view>
+    </view>
+    <view class="slider-section">
+      <view class="slider-header">
+        <text class="slider-label">目标单词数</text>
+        <text class="slider-value">{{settings.dailyGoal}}个</text>
+      </view>
+      <slider 
+        min="10" 
+        max="100" 
+        step="5" 
+        value="{{settings.dailyGoal}}" 
+        activeColor="{{primaryColor}}"
+        bindchange="onDailyGoalChange"
+      />
+    </view>
+
+    <view class="settings-item">
+      <text class="item-icon">⏰</text>
+      <view class="item-content">
+        <text class="item-title">学习提醒</text>
+        <text class="item-desc">每日定时提醒学习</text>
+      </view>
+      <switch 
+        class="switch-box"
+        checked="{{settings.reminderEnabled}}" 
+        color="{{primaryColor}}"
+        bindchange="onReminderToggle"
+      />
+    </view>
+
+    <view class="settings-item" wx:if="{{settings.reminderEnabled}}">
+      <text class="item-icon">🕐</text>
+      <view class="item-content">
+        <text class="item-title">提醒时间</text>
+      </view>
+      <picker mode="time" value="{{settings.reminderTime}}" bindchange="onReminderTimeChange">
+        <view class="time-picker">
+          <text class="item-value">{{settings.reminderTime}}</text>
+          <text class="item-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 声音与反馈 -->
+  <view class="settings-group">
+    <text class="group-title">声音与反馈</text>
+
+    <view class="settings-item">
+      <text class="item-icon">🔊</text>
+      <view class="item-content">
+        <text class="item-title">音效</text>
+        <text class="item-desc">答题正确/错误音效</text>
+      </view>
+      <switch 
+        class="switch-box"
+        checked="{{settings.soundEnabled}}" 
+        color="{{primaryColor}}"
+        bindchange="onSoundToggle"
+      />
+    </view>
+
+    <view class="settings-item">
+      <text class="item-icon">📳</text>
+      <view class="item-content">
+        <text class="item-title">震动反馈</text>
+        <text class="item-desc">操作时的触觉反馈</text>
+      </view>
+      <switch 
+        class="switch-box"
+        checked="{{settings.vibrationEnabled}}" 
+        color="{{primaryColor}}"
+        bindchange="onVibrationToggle"
+      />
+    </view>
+
+    <view class="settings-item">
+      <text class="item-icon">🗣️</text>
+      <view class="item-content">
+        <text class="item-title">自动播放发音</text>
+        <text class="item-desc">显示单词时自动播放发音</text>
+      </view>
+      <switch 
+        class="switch-box"
+        checked="{{settings.autoPlaySound}}" 
+        color="{{primaryColor}}"
+        bindchange="onAutoPlayToggle"
+      />
+    </view>
+  </view>
+
+  <!-- 外观设置 -->
+  <view class="settings-group">
+    <text class="group-title">外观设置</text>
+
+    <view class="settings-item">
+      <text class="item-icon">🎨</text>
+      <view class="item-content">
+        <text class="item-title">主题模式</text>
+        <text class="item-desc">选择应用的外观风格</text>
+      </view>
+    </view>
+    <view class="theme-options">
+      <view 
+        class="theme-btn {{settings.themeMode === 'system' ? 'active' : ''}}" 
+        bindtap="setTheme" 
+        data-theme="system"
+      >跟随系统</view>
+      <view 
+        class="theme-btn {{settings.themeMode === 'light' ? 'active' : ''}}" 
+        bindtap="setTheme" 
+        data-theme="light"
+      >浅色</view>
+      <view 
+        class="theme-btn {{settings.themeMode === 'dark' ? 'active' : ''}}" 
+        bindtap="setTheme" 
+        data-theme="dark"
+      >深色</view>
+    </view>
+  </view>
+
+  <!-- 数据管理 -->
+  <view class="settings-group">
+    <text class="group-title">数据管理</text>
+
+    <view class="settings-item danger-btn" bindtap="resetProgress">
+      <text class="item-icon">🗑️</text>
+      <text class="item-title">重置学习进度</text>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text>瓜瓜记单词 v1.0.0</text>
+  </view>
+</view>

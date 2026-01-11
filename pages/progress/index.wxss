@@ -1,0 +1,271 @@
+/* pages/progress/index.wxss */
+.progress-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding: var(--spacing-lg);
+  padding-bottom: calc(var(--spacing-xl) + env(safe-area-inset-bottom));
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 统计卡片 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.stat-card.primary {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+}
+
+.stat-card.secondary {
+  background: linear-gradient(135deg, var(--secondary-color), #0D9488);
+  color: white;
+}
+
+.stat-icon {
+  font-size: 40rpx;
+  margin-bottom: var(--spacing-sm);
+}
+
+.stat-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: var(--font-size-xs);
+  opacity: 0.8;
+  margin-top: var(--spacing-xs);
+}
+
+/* 图表区域 */
+.chart-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.section-title {
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.section-tab {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.tab-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+}
+
+.tab-btn.active {
+  color: white;
+  background: var(--primary-color);
+}
+
+/* 简易柱状图 */
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  height: 200rpx;
+  padding-top: var(--spacing-md);
+}
+
+.bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60rpx;
+}
+
+.bar {
+  width: 32rpx;
+  background: linear-gradient(to top, var(--primary-color), var(--primary-light));
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  min-height: 8rpx;
+  transition: height 0.3s ease;
+}
+
+.bar-label {
+  font-size: 20rpx;
+  color: var(--text-tertiary);
+  margin-top: var(--spacing-xs);
+}
+
+/* 热力图 */
+.heatmap {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6rpx;
+}
+
+.heat-cell {
+  aspect-ratio: 1;
+  border-radius: 4rpx;
+  background: var(--bg-tertiary);
+}
+
+.heat-cell.level-1 { background: rgba(14, 165, 233, 0.2); }
+.heat-cell.level-2 { background: rgba(14, 165, 233, 0.4); }
+.heat-cell.level-3 { background: rgba(14, 165, 233, 0.6); }
+.heat-cell.level-4 { background: var(--primary-color); }
+
+.heatmap-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+  font-size: 20rpx;
+  color: var(--text-tertiary);
+}
+
+.legend-item {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 4rpx;
+}
+
+/* 饼图 */
+.pie-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.pie-chart {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--success-color) 0deg calc(var(--mastered) * 3.6deg),
+    var(--primary-color) calc(var(--mastered) * 3.6deg) calc((var(--mastered) + var(--learning)) * 3.6deg),
+    var(--bg-tertiary) calc((var(--mastered) + var(--learning)) * 3.6deg) 360deg
+  );
+  position: relative;
+}
+
+.pie-chart::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80rpx;
+  height: 80rpx;
+  background: var(--bg-card);
+  border-radius: 50%;
+}
+
+.pie-legend {
+  flex: 1;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+}
+
+.legend-dot {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+}
+
+.legend-dot.mastered { background: var(--success-color); }
+.legend-dot.learning { background: var(--primary-color); }
+.legend-dot.new { background: var(--bg-tertiary); }
+
+.legend-text {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.legend-value {
+  margin-left: auto;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* 成就徽章 */
+.achievements-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.badge-icon {
+  width: 80rpx;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  background: var(--bg-tertiary);
+  border-radius: 50%;
+  margin-bottom: var(--spacing-xs);
+}
+
+.badge-item.unlocked .badge-icon {
+  background: linear-gradient(135deg, #FCD34D, #F59E0B);
+  box-shadow: 0 4rpx 12rpx rgba(245, 158, 11, 0.3);
+}
+
+.badge-item:not(.unlocked) .badge-icon {
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+.badge-name {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+}

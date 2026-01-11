@@ -1,0 +1,230 @@
+/* pages/test/index.wxss */
+.test-container {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.test-header {
+  padding: var(--spacing-lg);
+  text-align: center;
+}
+
+.test-title {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.test-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  margin-top: var(--spacing-xs);
+}
+
+/* 题型选择 */
+.type-selector {
+  display: flex;
+  gap: var(--spacing-md);
+  padding: 0 var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.type-btn {
+  flex: 1;
+  padding: var(--spacing-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.type-btn.active {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: white;
+  box-shadow: 0 4rpx 16rpx rgba(14, 165, 233, 0.3);
+}
+
+.type-icon {
+  font-size: 48rpx;
+  margin-bottom: var(--spacing-xs);
+}
+
+.type-name {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+/* 进度条 */
+.progress-section {
+  padding: 0 var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.progress-bar {
+  height: 12rpx;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+/* 题目卡片 */
+.question-card {
+  margin: 0 var(--spacing-lg);
+  padding: var(--spacing-xl);
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  min-height: 400rpx;
+}
+
+.question-word {
+  font-size: 72rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.question-phonetic {
+  font-size: var(--font-size-md);
+  color: var(--text-tertiary);
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+/* 选项 */
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.option-item {
+  padding: var(--spacing-lg);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-md);
+  text-align: center;
+  transition: all 0.2s;
+  border: 4rpx solid transparent;
+}
+
+.option-item:active {
+  transform: scale(0.98);
+}
+
+.option-item.correct {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: var(--success-color);
+  color: var(--success-color);
+}
+
+.option-item.wrong {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--error-color);
+  color: var(--error-color);
+  animation: shake 0.5s ease;
+}
+
+/* 填空输入 */
+.input-section {
+  margin-top: var(--spacing-lg);
+}
+
+.word-input {
+  width: 100%;
+  padding: var(--spacing-lg);
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-lg);
+  text-align: center;
+}
+
+.submit-btn {
+  margin-top: var(--spacing-lg);
+}
+
+/* 结果页 */
+.result-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+}
+
+.result-icon {
+  font-size: 160rpx;
+  margin-bottom: var(--spacing-lg);
+}
+
+.result-score {
+  font-size: 96rpx;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.result-label {
+  font-size: var(--font-size-md);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xl);
+}
+
+.result-stats {
+  display: flex;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-tertiary);
+}
+
+.result-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.result-actions .btn {
+  flex: 1;
+}
+
+/* 倒计时 */
+.timer {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--warning-color);
+}

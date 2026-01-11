@@ -1,0 +1,110 @@
+<!--pages/study/index.wxml-->
+<view class="study-container">
+  <!-- 学习中 -->
+  <block wx:if="{{!showFinish}}">
+    <!-- 顶部进度 -->
+    <view class="study-header">
+      <view class="progress-row">
+        <text class="progress-text">{{mode === 'review' ? '复习模式' : '学习模式'}}</text>
+        <text class="progress-count">{{currentIndex + 1}} / {{words.length}}</text>
+      </view>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{(currentIndex + 1) / words.length * 100}}%"></view>
+      </view>
+    </view>
+
+    <!-- 卡片区域 -->
+    <view class="card-area">
+      <view 
+        class="card-wrapper {{isFlipped ? 'flipped' : ''}} {{swipeClass}}"
+        bindtouchstart="onTouchStart"
+        bindtouchmove="onTouchMove"
+        bindtouchend="onTouchEnd"
+        bindtap="flipCard"
+      >
+        <!-- 正面 -->
+        <view class="card-face card-front">
+          <text class="word-text">{{currentWord.word}}</text>
+          <view class="phonetic-row">
+            <text class="phonetic-text">{{currentWord.phonetic}}</text>
+            <view class="sound-btn" catchtap="playSound">🔊</view>
+          </view>
+          <text class="flip-hint">点击卡片查看释义 👆</text>
+        </view>
+
+        <!-- 背面 -->
+        <view class="card-face card-back">
+          <view class="meaning-section">
+            <text class="word-small">{{currentWord.word}}</text>
+            <text class="meaning-text">{{currentWord.meaning}}</text>
+          </view>
+          <view class="example-section">
+            <text class="example-label">例句</text>
+            <text class="example-text">{{currentWord.example}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 滑动提示 -->
+    <view class="swipe-hints">
+      <view class="hint-item">
+        <text class="hint-icon">👈</text>
+        <text>不认识</text>
+      </view>
+      <view class="hint-item">
+        <text class="hint-icon">👆</text>
+        <text>收藏</text>
+      </view>
+      <view class="hint-item">
+        <text class="hint-icon">👉</text>
+        <text>认识</text>
+      </view>
+    </view>
+
+    <!-- 底部按钮 -->
+    <view class="action-bar">
+      <view class="action-btn btn-forget" bindtap="markForget">
+        <text class="btn-icon">🤔</text>
+        <text>不认识</text>
+      </view>
+      <view class="action-btn btn-favorite" bindtap="toggleFavorite">
+        <text class="btn-icon">{{isFavorite ? '⭐' : '☆'}}</text>
+        <text>收藏</text>
+      </view>
+      <view class="action-btn btn-remember" bindtap="markRemember">
+        <text class="btn-icon">😄</text>
+        <text>认识</text>
+      </view>
+    </view>
+  </block>
+
+  <!-- 完成弹窗 -->
+  <view class="finish-overlay" wx:if="{{showFinish}}">
+    <view class="finish-card animate-slideUp">
+      <text class="finish-icon">🎉</text>
+      <text class="finish-title">学习完成!</text>
+      <text class="finish-desc">本轮学习统计</text>
+
+      <view class="finish-stats">
+        <view class="finish-stat">
+          <text class="stat-value text-success">{{rememberCount}}</text>
+          <text class="stat-label">认识</text>
+        </view>
+        <view class="finish-stat">
+          <text class="stat-value text-error">{{forgetCount}}</text>
+          <text class="stat-label">不认识</text>
+        </view>
+        <view class="finish-stat">
+          <text class="stat-value text-warning">{{favoriteCount}}</text>
+          <text class="stat-label">已收藏</text>
+        </view>
+      </view>
+
+      <view class="finish-actions">
+        <button class="btn btn-primary" bindtap="goHome">返回首页</button>
+        <button class="btn btn-ghost" bindtap="continueStudy">继续学习</button>
+      </view>
+    </view>
+  </view>
+</view>

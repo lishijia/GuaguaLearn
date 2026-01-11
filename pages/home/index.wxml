@@ -1,0 +1,87 @@
+<!--pages/home/index.wxml-->
+<view class="home-container">
+  <!-- 顶部问候 -->
+  <view class="header">
+    <view class="greeting">
+      <text class="greeting-text">Hi, 小学霸! 👋</text>
+      <text class="greeting-sub">今天也要加油学单词哦~</text>
+    </view>
+    <image class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" mode="aspectFill"></image>
+  </view>
+
+  <!-- 连续打卡 -->
+  <view class="streak-banner" wx:if="{{streak > 0}}">
+    <text class="streak-icon">🔥</text>
+    <text class="streak-text">连续学习</text>
+    <text class="streak-count">{{streak}}</text>
+    <text class="streak-text">天</text>
+  </view>
+
+  <!-- 今日进度卡片 -->
+  <view class="progress-card">
+    <view class="progress-content">
+      <!-- 环形进度 -->
+      <view class="ring-progress">
+        <canvas canvas-id="progressRing" class="ring-bg"></canvas>
+        <view class="ring-center">
+          <text class="ring-value">{{progress.todayLearned}}</text>
+          <text class="ring-label">/ {{dailyGoal}}</text>
+        </view>
+      </view>
+      
+      <view class="progress-details">
+        <text class="progress-title">今日学习进度</text>
+        <view class="progress-stats">
+          <view class="stat-item">
+            <text class="stat-icon">📚</text>
+            <text class="stat-text">已学 {{progress.todayLearned}} 个</text>
+          </view>
+          <view class="stat-item">
+            <text class="stat-icon">🔄</text>
+            <text class="stat-text">复习 {{progress.todayReviewed}} 个</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 快捷操作 -->
+  <view class="quick-actions">
+    <view class="action-card" bindtap="startLearning">
+      <text class="action-icon">📖</text>
+      <text class="action-title">开始学习</text>
+      <text class="action-desc">学习新单词</text>
+    </view>
+    
+    <view class="action-card" bindtap="quickReview">
+      <text class="action-icon">🔄</text>
+      <text class="action-title">快速复习</text>
+      <text class="action-desc">待复习 {{reviewCount}} 个</text>
+      <view class="badge" wx:if="{{reviewCount > 0}}">{{reviewCount > 99 ? '99+' : reviewCount}}</view>
+    </view>
+    
+    <view class="action-card" bindtap="randomTest">
+      <text class="action-icon">🎯</text>
+      <text class="action-title">随机测试</text>
+      <text class="action-desc">检验成果</text>
+    </view>
+  </view>
+
+  <!-- 年级选择 -->
+  <view class="section-header">
+    <text class="section-title">选择年级</text>
+  </view>
+  
+  <view class="grade-list">
+    <view class="grade-card" wx:for="{{grades}}" wx:key="grade" bindtap="selectGrade" data-grade="{{item.grade}}">
+      <view class="grade-icon g{{item.grade}}">
+        <text>{{item.grade}}</text>
+      </view>
+      <view class="grade-info">
+        <text class="grade-name">{{item.name}}</text>
+        <text class="grade-count">共 {{item.count}} 个单词</text>
+      </view>
+      <text class="grade-arrow">›</text>
+    </view>
+  </view>
+</view>
